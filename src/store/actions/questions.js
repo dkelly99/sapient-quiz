@@ -3,7 +3,8 @@ import {mockQuestionData} from "../mockQuestionData";
 
 export const FETCH_QUESTIONS = 'FETCH_QUESTIONS';
 export const SET_QUESTIONS = 'SET_QUESTIONS';
-const SUBMIT_ANSWERS = 'SUBMIT_ANSWERS';
+export const SUBMIT_ANSWERS = 'SUBMIT_ANSWERS';
+export const RECEIVE_RESULTS = 'RECEIVE_RESULTS';
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
 
 export const updateAnswer = (id, answer) => {

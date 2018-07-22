@@ -1,5 +1,5 @@
 // import {Record, Set} from 'immutable';
-import {FETCH_QUESTIONS, UPDATE_ANSWER, SET_QUESTIONS} from '../actions/questions';
+import {FETCH_QUESTIONS, UPDATE_ANSWER, SET_QUESTIONS, SUBMIT_ANSWERS, RECEIVE_RESULTS} from '../actions/questions';
 
 const initialState = {
     isFetching: false,
@@ -13,6 +13,18 @@ export const questionData = (state = initialState, action) => {
             return {
                 ...state,
                 isFetching: true
+            };
+
+        case SUBMIT_ANSWERS:
+            return {
+                ...state,
+                isSubmitting: true
+            };
+
+        case RECEIVE_RESULTS:
+            return {
+                ...state,
+                isSubmitting: false
             };
 
         case SET_QUESTIONS:

@@ -54,8 +54,16 @@ class App extends Component {
             total={totalNumberOfQuestions} />;
     }
 
-    renderSubmitButton() {
-        return <Cell><Button onClick={this.props.submitAnswers}>Submit</Button></Cell>;
+    renderSubmitButton(isReadyToSubmit) {
+        const {submitAnswers, isSubmitting} = this.props;
+        return <Button
+            onClick={submitAnswers}
+            loading={isSubmitting}
+            type={isReadyToSubmit ? 'primary' : 'default'}>
+
+            {isSubmitting ? 'Waiting for results' : 'Submit'}
+
+        </Button>;
     }
 
     render() {
@@ -63,6 +71,8 @@ class App extends Component {
         const qStart = (this.state.pageNumber - 1) * PAGE_SIZE;
         const pagedData = allQuestionData.slice(qStart, qStart + PAGE_SIZE);
         const totalQuestions = allQuestionData.length;
+        const questionsAnswered = allQuestionData.filter( (question) => !!question.answer ).length;
+        const isReadyToSubmit = totalQuestions === questionsAnswered;
 
         return (
           <Layout style={{height: '100vh'}} className="App">
@@ -78,7 +88,7 @@ class App extends Component {
               </Content>
               <Footer>
                   {pagedData.length > 0 && this.renderPagination(totalQuestions)}
-                  {pagedData.length > 0 && this.renderSubmitButton()}
+                  {pagedData.length > 0 && this.renderSubmitButton(isReadyToSubmit)}
               </Footer>
           </Layout>
         );
