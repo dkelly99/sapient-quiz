@@ -32,7 +32,7 @@ export const ScoreBoard = (props) => <Cell><Card><div>
         <Table
             pagination={false}
             columns={columns}
-            dataSource={mockScoreBoardData} />
+            dataSource={props.scoreBoardData} />
     </Cell>
 </div></Card></Cell>;
 
@@ -40,5 +40,6 @@ ScoreBoard.propTypes = {
     name: PropTypes.string.isRequired,
     isFetching: PropTypes.bool.isRequired,
     fetchQuestions: PropTypes.func.isRequired,
-    handleNameChange: PropTypes.func.isRequired
+    handleNameChange: PropTypes.func.isRequired,
+    scoreBoardData: PropTypes.any.isRequired
 };

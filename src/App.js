@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { Button, Icon, Input, Layout, Col, Pagination } from 'antd';
+import { Button, Icon, Layout, Col, Pagination } from 'antd';
 
 import { Question } from './components/Question';
 import {fetchQuestions, submitAnswers, updateAnswer, updateName} from './store/actions/questions';
@@ -61,7 +61,8 @@ class App extends Component {
     }
 
     render() {
-        const allQuestionData = this.props.questionData;
+        const {questionData, name, isFetching, scoreBoardData, getQuestions} = this.props;
+        const allQuestionData = questionData;
         const qStart = (this.state.pageNumber - 1) * PAGE_SIZE;
         const pagedData = allQuestionData.slice(qStart, qStart + PAGE_SIZE);
         const totalQuestions = allQuestionData.length;
@@ -77,9 +78,10 @@ class App extends Component {
               <Content style={{paddingTop: 80, overflow: 'auto'}}>
                   <Col xs={{span: 24}} lg={{span: 8, offset:8}}>
                       {!pagedData.length && <ScoreBoard
-                          name={this.props.name}
-                          isFetching={this.props.isFetching}
-                          fetchQuestions={this.props.fetchQuestions}
+                          scoreBoardData={scoreBoardData}
+                          name={name}
+                          isFetching={isFetching}
+                          fetchQuestions={getQuestions}
                           handleNameChange={this.handleNameChange}/>}
 
                       {pagedData.map( (question, index) => this.renderQuestion(question, qStart + index + 1) )}
@@ -100,7 +102,8 @@ const mapStateToProps = (state = {}) => {
         questionData: questionData.questions,
         isFetching: questionData.isFetching,
         isSubmitting: questionData.isSubmitting,
-        name: questionData.name
+        name: questionData.name,
+        scoreBoardData: questionData.scoreboard
     };
 };
 

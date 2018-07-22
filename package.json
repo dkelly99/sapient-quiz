@@ -8,6 +8,7 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
+    "startQuestionServer": "node ./questionServer/start.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",

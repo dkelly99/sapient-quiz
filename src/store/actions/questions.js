@@ -1,5 +1,5 @@
 import {Modal} from "antd/lib/index";
-import {mockQuestionData} from "../mockQuestionData";
+import {questionAPI} from '../../rest/questionsAPI';
 
 export const FETCH_QUESTIONS = 'FETCH_QUESTIONS';
 export const SET_QUESTIONS = 'SET_QUESTIONS';
@@ -7,6 +7,7 @@ export const SUBMIT_ANSWERS = 'SUBMIT_ANSWERS';
 export const RECEIVE_RESULTS = 'RECEIVE_RESULTS';
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
 export const UPDATE_NAME = 'UPDATE_NAME';
+export const UPDATE_SCOREBOARD= 'UPDATE_SCOREBOARD';
 
 export const updateAnswer = (id, answer) => {
     return {
@@ -54,13 +55,23 @@ export const fetchQuestions = () => {
             type: FETCH_QUESTIONS
         });
 
-        //we then wait for the questions to be returned before setting the question data
-        setTimeout(() => {
+        questionAPI.getQuestions().then( (questions) => {
             dispatch({
-                questionData: mockQuestionData,
+                questionData: questions,
                 type: SET_QUESTIONS
             });
-        }, 2000);
+        });
+    };
+};
 
+export const updateScoreboard = () => {
+
+    return (dispatch) => {
+        questionAPI.getScoreboard().then( (scoreboard) => {
+            dispatch({
+                scoreboard,
+                type: UPDATE_SCOREBOARD
+            });
+        });
     };
 };

@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import { applyMiddleware , createStore  } from 'redux';
 import thunk from 'redux-thunk';
 
+import {updateScoreboard} from './store/actions/questions';
+
 // CSS
 import './index.css';
 import 'antd/dist/antd.css';
@@ -13,6 +15,9 @@ import {reducers} from './store/reducers/index';
 import registerServiceWorker from './registerServiceWorker';
 
 const store = createStore(reducers, applyMiddleware(thunk) );
+
+//Initialise the scoreboard data on startup
+store.dispatch(updateScoreboard());
 
 ReactDOM.render(
     <Provider store={store}>

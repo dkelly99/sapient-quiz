@@ -1,11 +1,13 @@
 // import {Record, Set} from 'immutable';
-import {FETCH_QUESTIONS, UPDATE_ANSWER, SET_QUESTIONS, SUBMIT_ANSWERS, RECEIVE_RESULTS, UPDATE_NAME} from '../actions/questions';
+import {FETCH_QUESTIONS, UPDATE_ANSWER, SET_QUESTIONS, SUBMIT_ANSWERS,
+    RECEIVE_RESULTS, UPDATE_NAME, UPDATE_SCOREBOARD} from '../actions/questions';
 
 const initialState = {
     isFetching: false,
     isSubmitting: false,
     questions: [],
-    name: ''
+    name: '',
+    scoreboard: []
 };
 
 export const questionData = (state = initialState, action) => {
@@ -15,6 +17,12 @@ export const questionData = (state = initialState, action) => {
             return {
                 ...state,
                 name: action.name
+            };
+        case UPDATE_SCOREBOARD:
+            return {
+                ...state,
+                questions: [],
+                scoreboard: action.scoreboard
             };
 
         case FETCH_QUESTIONS:
