@@ -58,15 +58,28 @@ const CardBody = styled.div`
     background: #FFFFFF;
 `;
 
+export const BasicCard = styled.div`
+    box-shadow: ${boxShadow};
+    padding: 24px;
+    overflow: auto;
+    text-align: center;
+    background: #FFFFFF;
+`;
+
+/* if props.order OR props.title are supplied, then create a card with the header... otherwise just use BasicCard */
 export const Card = (props) => <div>
+    {!(props.order && props.title) &&
+    <BasicCard>
+        {props.children}
+    </BasicCard>}
     {(props.order || props.title) &&
-    <CardHeader>
+    <div><CardHeader>
         <HeaderIDContainer><HeaderID>{props.order}</HeaderID></HeaderIDContainer>
         <HeaderTextContainer><HeaderText>{props.title}</HeaderText></HeaderTextContainer>
-    </CardHeader>}
+    </CardHeader>
     <CardBody>
         {props.children}
-    </CardBody>
+    </CardBody></div>}
 </div>;
 
 Card.propTypes = {

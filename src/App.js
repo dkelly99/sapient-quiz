@@ -8,7 +8,7 @@ import {Cell} from './components/Cell';
 import {fetchQuestions, submitAnswers, updateAnswer} from './store/actions/questions';
 import './App.css';
 
-const {Header, Content} = Layout;
+const {Header, Content, Footer} = Layout;
 const PAGE_SIZE = 5;
 
 class App extends Component {
@@ -26,41 +26,60 @@ class App extends Component {
         });
     }
 
+    renderStartButton() {
+        return <Cell><Card>
+            <Button
+                onClick={this.props.fetchQuestions}
+                loading={this.props.isFetching}>
+                Click here to begin your general knowledge quiz!
+            </Button>
+        </Card></Cell>;
+    }
+
+    renderQuestion(question, order) {
+        return <Question
+            className={'App-row'}
+            key={question.id}
+            handleChange={this.props.updateAnswer}
+            questionOrder={order}
+            questionData={question}/>;
+    }
+
+    renderPagination(totalNumberOfQuestions) {
+        return <Pagination
+            style={{padding: 8}}
+            onChange={this.handlePageChange}
+            current={this.state.pageNumber}
+            pageSize={PAGE_SIZE}
+            total={totalNumberOfQuestions} />;
+    }
+
+    renderSubmitButton() {
+        return <Cell><Button onClick={this.props.submitAnswers}>Submit</Button></Cell>;
+    }
+
     render() {
         const allQuestionData = this.props.questionData;
         const qStart = (this.state.pageNumber - 1) * PAGE_SIZE;
         const pagedData = allQuestionData.slice(qStart, qStart + PAGE_SIZE);
+        const totalQuestions = allQuestionData.length;
 
         return (
-          <Layout className="App">
+          <Layout style={{height: '100vh'}} className="App">
               <Header className='App-header' style={{background: '#0030FF'}}>
                   <span className='App-title'>SAPIENT QUIZ_ <Icon type='question-circle-o' /></span>
               </Header>
-              <Content style={{paddingTop: 64}}>
+              <Content style={{paddingTop: 80, overflow: 'auto'}}>
                   <Col xs={{span: 24}} lg={{span: 8, offset:8}}>
-                      {!pagedData.length && <Cell><Card>
-                          <Button
-                              onClick={this.props.fetchQuestions}
-                              loading={this.props.isFetching}>
-                              Click here to begin your general knowledge quiz!</Button></Card></Cell>}
+                      {!pagedData.length && this.renderStartButton()}
 
-                      {pagedData.map( (question, index) =>
-                          <Cell key={question.id}><Question
-                              className={'App-row'}
-                              key={question.id}
-                              handleChange={this.props.updateAnswer}
-                              questionOrder={qStart + index + 1}
-                              questionData={question}/></Cell>
-                      )}
-                      {pagedData.length > 0 && <Cell><Pagination
-                          style={{padding: 8}}
-                          onChange={this.handlePageChange}
-                          current={this.state.pageNumber}
-                          pageSize={PAGE_SIZE}
-                          total={allQuestionData.length} /></Cell>}
-                      {pagedData.length > 0 && <Cell><Button onClick={this.props.submitAnswers}>Submit</Button></Cell>}
+                      {pagedData.map( (question, index) => this.renderQuestion(question, qStart + index + 1) )}
                   </Col>
               </Content>
+              <Footer>
+                  {pagedData.length > 0 && this.renderPagination(totalQuestions)}
+                  {pagedData.length > 0 && this.renderSubmitButton()}
+              </Footer>
           </Layout>
         );
       }
