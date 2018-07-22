@@ -222,7 +222,6 @@ export const mockQuestionData = [{
 }, {
     "id": "98-009-5810",
     "title": "Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc?",
-    "answer": "a",
     "answers": [
         {
             "value": "a",

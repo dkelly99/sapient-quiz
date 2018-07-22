@@ -58,7 +58,7 @@ const CardBody = styled.div`
     background: #FFFFFF;
 `;
 
-export const Card = (props) => <div style={{margin: 16}}>
+export const Card = (props) => <div>
     {(props.order || props.title) &&
     <CardHeader>
         <HeaderIDContainer><HeaderID>{props.order}</HeaderID></HeaderIDContainer>

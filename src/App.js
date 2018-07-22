@@ -4,6 +4,7 @@ import { Button, Icon, Layout, Col, Pagination } from 'antd';
 
 import { Question } from './components/Question';
 import {Card} from './components/Card';
+import {Cell} from './components/Cell';
 import {fetchQuestions, submitAnswers, updateAnswer} from './store/actions/questions';
 import './App.css';
 
@@ -37,26 +38,27 @@ class App extends Component {
               </Header>
               <Content style={{paddingTop: 64}}>
                   <Col xs={{span: 24}} lg={{span: 8, offset:8}}>
-                      {!pagedData.length && <Card>
+                      {!pagedData.length && <Cell><Card>
                           <Button
                               onClick={this.props.fetchQuestions}
                               loading={this.props.isFetching}>
-                              Click here to begin your general knowledge quiz!</Button></Card>}
+                              Click here to begin your general knowledge quiz!</Button></Card></Cell>}
 
                       {pagedData.map( (question, index) =>
-                          <Question
+                          <Cell key={question.id}><Question
+                              className={'App-row'}
                               key={question.id}
                               handleChange={this.props.updateAnswer}
                               questionOrder={qStart + index + 1}
-                              questionData={question}/>
+                              questionData={question}/></Cell>
                       )}
-                      {pagedData.length > 0 && <Pagination
+                      {pagedData.length > 0 && <Cell><Pagination
                           style={{padding: 8}}
                           onChange={this.handlePageChange}
                           current={this.state.pageNumber}
                           pageSize={PAGE_SIZE}
-                          total={allQuestionData.length} />}
-                      {pagedData.length > 0 && <Button onClick={this.props.submitAnswers}>Submit</Button>}
+                          total={allQuestionData.length} /></Cell>}
+                      {pagedData.length > 0 && <Cell><Button onClick={this.props.submitAnswers}>Submit</Button></Cell>}
                   </Col>
               </Content>
           </Layout>

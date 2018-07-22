@@ -9,7 +9,7 @@ export const Question = (props) => {
     const {handleChange, questionOrder} = props;
     const radioStyle = {display: 'block', lineHeight: '30px',  color: '#333333', fontSize: 16, letterSpacing: 0};
 
-    return <Card order={questionOrder} title={title} style={{margin: 16, textAlign: 'left'}}>
+    return <Card order={questionOrder} title={title} style={{textAlign: 'left'}}>
         <Radio.Group
             onChange={(e) => {handleChange(id, e.target.value)}}
             value={answer}
