@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { Button, Icon, Layout, Col, Pagination, Modal } from 'antd';
+import {connect} from 'react-redux';
+import { Button, Icon, Layout, Col, Pagination } from 'antd';
+
 import { Question } from './components/Question';
+import {Card} from './components/Card';
+import {fetchQuestions, submitAnswers, updateAnswer} from './store/actions/questions';
 import './App.css';
 
-const {Header, Content, Footer} = Layout;
-
+const {Header, Content} = Layout;
 const PAGE_SIZE = 5;
 
 class App extends Component {
@@ -13,32 +16,13 @@ class App extends Component {
         this.state = {
             pageNumber: 1
         };
-        this.updateAnswer = this.updateAnswer.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    updateAnswer(questionId, questionValue) {
-        console.log(questionId, questionValue);
     }
 
     handlePageChange(page) {
         this.setState({
             pageNumber: page
         });
-    }
-
-    handleSubmit() {
-        const totalQuestions = 15;
-        const questionsAnswered = 3;
-        if (questionsAnswered !== totalQuestions) {
-            const modal = Modal.warning({
-                title: 'You must answer all questions',
-                content: `You have answered ${questionsAnswered} of ${totalQuestions} questions.
-                    Please answer all questions before submitting your answers.`,
-            });
-            setTimeout(() => modal.destroy(), 3000);
-        }
     }
 
     render() {
@@ -53,20 +37,26 @@ class App extends Component {
               </Header>
               <Content style={{paddingTop: 64}}>
                   <Col xs={{span: 24}} lg={{span: 8, offset:8}}>
+                      {!pagedData.length && <Card>
+                          <Button
+                              onClick={this.props.fetchQuestions}
+                              loading={this.props.isFetching}>
+                              Click here to begin your general knowledge quiz!</Button></Card>}
+
                       {pagedData.map( (question, index) =>
                           <Question
                               key={question.id}
-                              handleChange={this.updateAnswer}
+                              handleChange={this.props.updateAnswer}
                               questionOrder={qStart + index + 1}
                               questionData={question}/>
                       )}
-                      <Pagination
+                      {pagedData.length > 0 && <Pagination
                           style={{padding: 8}}
                           onChange={this.handlePageChange}
                           current={this.state.pageNumber}
                           pageSize={PAGE_SIZE}
-                          total={allQuestionData.length} />
-                      <Button onClick={this.handleSubmit}>Submit</Button>
+                          total={allQuestionData.length} />}
+                      {pagedData.length > 0 && <Button onClick={this.props.submitAnswers}>Submit</Button>}
                   </Col>
               </Content>
           </Layout>
@@ -74,4 +64,18 @@ class App extends Component {
       }
 }
 
-export default App;
+const mapStateToProps = (state = {}) => {
+    const {questionData} = state;
+    return {
+        questionData: questionData.questions,
+        isFetching: questionData.isFetching,
+        isSubmitting: questionData.isSubmitting
+    };
+};
+
+const mapDispatchToProps = {
+        updateAnswer: (id, answer) => updateAnswer(id, answer),
+        fetchQuestions: fetchQuestions,
+        submitAnswers: submitAnswers
+    };
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 
 const headerHeight = 80;
 const headerOffset = 0;
-const bodyOffset = 20;
+const bodyOffset = 40;
 const boxShadow = '0 10px 20px 0 rgba(0,0,0,0.20)';
 
 const HeaderIDContainer = styled.div`
@@ -59,10 +59,11 @@ const CardBody = styled.div`
 `;
 
 export const Card = (props) => <div style={{margin: 16}}>
+    {(props.order || props.title) &&
     <CardHeader>
         <HeaderIDContainer><HeaderID>{props.order}</HeaderID></HeaderIDContainer>
         <HeaderTextContainer><HeaderText>{props.title}</HeaderText></HeaderTextContainer>
-    </CardHeader>
+    </CardHeader>}
     <CardBody>
         {props.children}
     </CardBody>
@@ -70,6 +71,6 @@ export const Card = (props) => <div style={{margin: 16}}>
 
 Card.propTypes = {
     children: PropTypes.element.isRequired,
-    order: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired
+    order: PropTypes.number,
+    title: PropTypes.string
 };

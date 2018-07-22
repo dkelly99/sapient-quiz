@@ -21,7 +21,7 @@
     }
 ];*/
 
-export const questionData = [{
+export const mockQuestionData = [{
     "id": "93-612-2232",
     "title": "Praesent id massa id nisl venenatis lacinia?",
     "answers": [
