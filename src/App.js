@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { Button, Icon, Layout, Col, Pagination } from 'antd';
+import { Button, Icon, Input, Layout, Col, Pagination } from 'antd';
 
 import { Question } from './components/Question';
-import {Card} from './components/Card';
-import {Cell} from './components/Cell';
-import {fetchQuestions, submitAnswers, updateAnswer} from './store/actions/questions';
+import {fetchQuestions, submitAnswers, updateAnswer, updateName} from './store/actions/questions';
 import './App.css';
+import {ScoreBoard} from "./components/ScoreBoard";
 
-const {Header, Content, Footer} = Layout;
+const {Content, Footer, Header} = Layout;
 const PAGE_SIZE = 5;
 
 class App extends Component {
@@ -17,23 +16,18 @@ class App extends Component {
         this.state = {
             pageNumber: 1
         };
+        this.handleNameChange = this.handleNameChange.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
+    }
+
+    handleNameChange(evt) {
+        this.props.updateName(evt.target.value);
     }
 
     handlePageChange(page) {
         this.setState({
             pageNumber: page
         });
-    }
-
-    renderStartButton() {
-        return <Cell><Card>
-            <Button
-                onClick={this.props.fetchQuestions}
-                loading={this.props.isFetching}>
-                Click here to begin your general knowledge quiz!
-            </Button>
-        </Card></Cell>;
     }
 
     renderQuestion(question, order) {
@@ -78,10 +72,15 @@ class App extends Component {
           <Layout style={{height: '100vh'}} className="App">
               <Header className='App-header' style={{background: '#0030FF'}}>
                   <span className='App-title'>SAPIENT QUIZ_ <Icon type='question-circle-o' /></span>
+                  <span style={{float: 'right'}}><Icon type='user' /> {this.props.name}</span>
               </Header>
               <Content style={{paddingTop: 80, overflow: 'auto'}}>
                   <Col xs={{span: 24}} lg={{span: 8, offset:8}}>
-                      {!pagedData.length && this.renderStartButton()}
+                      {!pagedData.length && <ScoreBoard
+                          name={this.props.name}
+                          isFetching={this.props.isFetching}
+                          fetchQuestions={this.props.fetchQuestions}
+                          handleNameChange={this.handleNameChange}/>}
 
                       {pagedData.map( (question, index) => this.renderQuestion(question, qStart + index + 1) )}
                   </Col>
@@ -100,12 +99,14 @@ const mapStateToProps = (state = {}) => {
     return {
         questionData: questionData.questions,
         isFetching: questionData.isFetching,
-        isSubmitting: questionData.isSubmitting
+        isSubmitting: questionData.isSubmitting,
+        name: questionData.name
     };
 };
 
 const mapDispatchToProps = {
         updateAnswer: (id, answer) => updateAnswer(id, answer),
+        updateName: updateName,
         fetchQuestions: fetchQuestions,
         submitAnswers: submitAnswers
     };

@@ -6,11 +6,19 @@ export const SET_QUESTIONS = 'SET_QUESTIONS';
 export const SUBMIT_ANSWERS = 'SUBMIT_ANSWERS';
 export const RECEIVE_RESULTS = 'RECEIVE_RESULTS';
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
+export const UPDATE_NAME = 'UPDATE_NAME';
 
 export const updateAnswer = (id, answer) => {
     return {
         id, answer,
-        type: 'UPDATE_ANSWER'
+        type: UPDATE_ANSWER
+    };
+};
+
+export const updateName = (name) => {
+    return {
+        name,
+        type: UPDATE_NAME
     };
 };
 

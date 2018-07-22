@@ -1,14 +1,22 @@
 // import {Record, Set} from 'immutable';
-import {FETCH_QUESTIONS, UPDATE_ANSWER, SET_QUESTIONS, SUBMIT_ANSWERS, RECEIVE_RESULTS} from '../actions/questions';
+import {FETCH_QUESTIONS, UPDATE_ANSWER, SET_QUESTIONS, SUBMIT_ANSWERS, RECEIVE_RESULTS, UPDATE_NAME} from '../actions/questions';
 
 const initialState = {
     isFetching: false,
     isSubmitting: false,
-    questions: []};
+    questions: [],
+    name: ''
+};
 
 export const questionData = (state = initialState, action) => {
 
     switch (action.type) {
+        case UPDATE_NAME:
+            return {
+                ...state,
+                name: action.name
+            };
+
         case FETCH_QUESTIONS:
             return {
                 ...state,
@@ -29,12 +37,14 @@ export const questionData = (state = initialState, action) => {
 
         case SET_QUESTIONS:
             return {
+                ...state,
                 isFetching: false,
                 questions: [...action.questionData]
             };
 
         case UPDATE_ANSWER:
             return {
+                ...state,
                 isFetching: false,
                 questions: [...state.questions].map( (question) => {
                     if (question.id === action.id) {
@@ -45,6 +55,6 @@ export const questionData = (state = initialState, action) => {
             };
 
         default:
-            return state;
+            return {...state};
     }
 };
