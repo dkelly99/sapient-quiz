@@ -1,18 +1,13 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import { Button, Input, Icon, Table } from 'antd';
+import { Alert, Button, Input, Icon, Table } from 'antd';
 import { Card } from './Card';
 import { Cell } from './Cell';
 
 const columns = [
     {title: 'Name', dataIndex: 'name', key: 'name' },
     {title: 'Score', dataIndex: 'score', key: 'score'}];
-
-const mockScoreBoardData = [
-    {key: '1', name: 'John Brown', score: 32},
-    {key: '2',name: 'Jim Green', score: 42},
-    {key: '3',name: 'Joe Black',score: 32}];
 
 export const ScoreBoard = (props) => <Cell><Card><div>
     <Cell>
@@ -23,23 +18,37 @@ export const ScoreBoard = (props) => <Cell><Card><div>
             addonBefore={<Icon type='user' />} />
         <Cell><Button
             disabled={!props.name || props.name === ''}
-            onClick={props.fetchQuestions}
+            onClick={props.getQuestions}
             loading={props.isFetching}>
             {!props.isFetching ? 'Start your quiz!' : 'Getting Questions'}
         </Button></Cell>
     </Cell>
     <Cell>
-        <Table
-            pagination={false}
-            columns={columns}
-            dataSource={props.scoreBoardData} />
+        {props.scoreBoardData === null ?
+            <Alert
+                message='There was a problem accessing the questionServerAPI'
+                description={`
+                Please check that the questionServerAPI is running.
+                You can launch it with the following command:
+                    "npm run startQuestionServer"`}
+                type='warning'
+            /> :
+            <Table
+                pagination={false}
+                columns={columns}
+                dataSource={
+                    props.scoreBoardData.map( (item, index) => {
+                        item.key = index;
+                        return item;
+                    })} />
+        }
     </Cell>
 </div></Card></Cell>;
 
 ScoreBoard.propTypes = {
     name: PropTypes.string.isRequired,
     isFetching: PropTypes.bool.isRequired,
-    fetchQuestions: PropTypes.func.isRequired,
+    getQuestions: PropTypes.func.isRequired,
     handleNameChange: PropTypes.func.isRequired,
     scoreBoardData: PropTypes.any.isRequired
 };

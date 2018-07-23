@@ -7,7 +7,8 @@ export const SUBMIT_ANSWERS = 'SUBMIT_ANSWERS';
 export const RECEIVE_RESULTS = 'RECEIVE_RESULTS';
 export const UPDATE_ANSWER = 'UPDATE_ANSWER';
 export const UPDATE_NAME = 'UPDATE_NAME';
-export const UPDATE_SCOREBOARD= 'UPDATE_SCOREBOARD';
+export const UPDATE_SCOREBOARD = 'UPDATE_SCOREBOARD';
+export const SHOW_RESULTS = 'SHOW_RESULTS';
 
 export const updateAnswer = (id, answer) => {
     return {
@@ -27,7 +28,7 @@ export const submitAnswers = () => {
     return (dispatch, getState) => {
 
         const {questionData} = getState();
-        const {questions} = questionData;
+        const {questions, name} = questionData;
 
         const totalNumber = questions.length;
         const questionsAnswered = questions.filter( (question) => !!question.answer ).length;
@@ -40,14 +41,19 @@ export const submitAnswers = () => {
             setTimeout(() => modal.destroy(), 3000);
         } else {
             dispatch({
-                //questionData,
                 type: SUBMIT_ANSWERS
+            });
+            questionAPI.submitAnswers(questions, name).then( (result) => {
+                dispatch({
+                    result,
+                    type: SHOW_RESULTS
+                });
             });
         }
     };
 };
 
-export const fetchQuestions = () => {
+export const getQuestions = () => {
 
     return (dispatch) => {
         //first, we immediately update loading state
@@ -69,7 +75,12 @@ export const updateScoreboard = () => {
     return (dispatch) => {
         questionAPI.getScoreboard().then( (scoreboard) => {
             dispatch({
-                scoreboard,
+                scoreboard: scoreboard,
+                type: UPDATE_SCOREBOARD
+            });
+        }).catch( () => {
+            dispatch({
+                scoreboard: null,
                 type: UPDATE_SCOREBOARD
             });
         });

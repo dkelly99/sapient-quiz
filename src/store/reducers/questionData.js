@@ -1,13 +1,14 @@
 // import {Record, Set} from 'immutable';
 import {FETCH_QUESTIONS, UPDATE_ANSWER, SET_QUESTIONS, SUBMIT_ANSWERS,
-    RECEIVE_RESULTS, UPDATE_NAME, UPDATE_SCOREBOARD} from '../actions/questions';
+    RECEIVE_RESULTS, UPDATE_NAME, UPDATE_SCOREBOARD, SHOW_RESULTS} from '../actions/questions';
 
 const initialState = {
     isFetching: false,
     isSubmitting: false,
     questions: [],
     name: '',
-    scoreboard: []
+    scoreboard: [],
+    result: null
 };
 
 export const questionData = (state = initialState, action) => {
@@ -21,6 +22,7 @@ export const questionData = (state = initialState, action) => {
         case UPDATE_SCOREBOARD:
             return {
                 ...state,
+                result: null,
                 questions: [],
                 scoreboard: action.scoreboard
             };
@@ -61,7 +63,12 @@ export const questionData = (state = initialState, action) => {
                     return question;
                 })
             };
-
+        case SHOW_RESULTS:
+            return {
+                ...state,
+                isSubmitting: false,
+                result: action.result
+            };
         default:
             return {...state};
     }
