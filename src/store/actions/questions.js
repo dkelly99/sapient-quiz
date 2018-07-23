@@ -1,4 +1,3 @@
-import {Modal} from "antd/lib/index";
 import {questionAPI} from '../../rest/questionsAPI';
 
 export const FETCH_QUESTIONS = 'FETCH_QUESTIONS';
@@ -30,26 +29,15 @@ export const submitAnswers = () => {
         const {questionData} = getState();
         const {questions, name} = questionData;
 
-        const totalNumber = questions.length;
-        const questionsAnswered = questions.filter( (question) => !!question.answer ).length;
-        if (questionsAnswered !== totalNumber) {
-            const modal = Modal.warning({
-                title: 'You must answer all questions',
-                content: `You have answered ${questionsAnswered} of ${totalNumber} questions.
-                    Please answer all questions before submitting your answers.`,
-            });
-            setTimeout(() => modal.destroy(), 3000);
-        } else {
+        dispatch({
+            type: SUBMIT_ANSWERS
+        });
+        questionAPI.submitAnswers(questions, name).then( (result) => {
             dispatch({
-                type: SUBMIT_ANSWERS
+                result,
+                type: SHOW_RESULTS
             });
-            questionAPI.submitAnswers(questions, name).then( (result) => {
-                dispatch({
-                    result,
-                    type: SHOW_RESULTS
-                });
-            });
-        }
+        });
     };
 };
 

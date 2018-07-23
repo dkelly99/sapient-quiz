@@ -6,7 +6,6 @@ I have included it here purely as an example of the type of test that we would h
 #################################################################
  */
 const mockResponseSend = jest.fn();
-const mockResponseSend = jest.fn();
 const mockDBupdateScoreBoard = jest.fn();
 
 jest.mock('../db', () => ({
@@ -41,7 +40,7 @@ describe('routes - submit', () => {
             const mockResponse = {
                 status: () => ({
                     send: mockResponseSend
-                });
+                })
             };
 
             submit(mockRequest, mockResponse);

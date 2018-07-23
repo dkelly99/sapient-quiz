@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { Button, Icon, Layout, Col, Pagination } from 'antd';
+import { Button, Icon, Layout, Col, Pagination, Modal} from 'antd';
 
 import { Question } from './components/Question';
 import { ResultPopup} from './components/ResultPopup';
@@ -19,6 +19,7 @@ export class App extends Component {
         };
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
+        this.handleSubmitClick = this.handleSubmitClick.bind(this);
     }
 
     handleNameChange(evt) {
@@ -29,6 +30,22 @@ export class App extends Component {
         this.setState({
             pageNumber: page
         });
+    }
+
+    handleSubmitClick() {
+        const {questionData, submitAnswers} = this.props;
+        const totalNumber = questionData.length;
+        const questionsAnswered = questionData.filter( (question) => !!question.answer ).length;
+        if (questionsAnswered !== totalNumber) {
+            const modal = Modal.warning({
+                title: 'You must answer all questions',
+                content: `You have answered ${questionsAnswered} of ${totalNumber} questions.
+                    Please answer all questions before submitting your answers.`,
+            });
+            setTimeout(() => modal.destroy(), 3000);
+        } else {
+            submitAnswers();
+        }
     }
 
     renderQuestion(question, order) {
@@ -50,13 +67,12 @@ export class App extends Component {
     }
 
     renderSubmitButton(isReadyToSubmit) {
-        const {submitAnswers, isSubmitting} = this.props;
         return <Button
-            onClick={submitAnswers}
-            loading={isSubmitting}
+            onClick={this.handleSubmitClick}
+            loading={this.props.isSubmitting}
             type={isReadyToSubmit ? 'primary' : 'default'}>
 
-            {isSubmitting ? 'Waiting for results' : 'Submit'}
+            {this.props.isSubmitting ? 'Waiting for results' : 'Submit'}
 
         </Button>;
     }
