@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import {appRouter} from './routes'
+import {appRouter} from './routes/routes'
 
 const PORT_NUMBER = 3009;
 const app = express();
