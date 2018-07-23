@@ -10,7 +10,7 @@ import {updateScoreboard} from './store/actions/questions';
 import './index.css';
 import 'antd/dist/antd.css';
 
-import App from './App';
+import {AppContainer} from './App';
 import {reducers} from './store/reducers/index';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -21,7 +21,7 @@ store.dispatch(updateScoreboard());
 
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <AppContainer />
     </Provider>,
     document.getElementById('root'));
 registerServiceWorker();

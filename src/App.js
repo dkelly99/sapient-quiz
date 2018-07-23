@@ -11,7 +11,7 @@ import {ScoreBoard} from "./components/ScoreBoard";
 const {Content, Footer, Header} = Layout;
 const PAGE_SIZE = 5;
 
-class App extends Component {
+export class App extends Component {
     constructor() {
         super();
         this.state = {
@@ -118,4 +118,4 @@ const mapDispatchToProps = {
         submitAnswers: submitAnswers,
         updateScoreboard: updateScoreboard
     };
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export const AppContainer = connect(mapStateToProps, mapDispatchToProps)(App);
