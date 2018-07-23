@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {App} from './App';
-import {getQuestions, submitAnswers, updateAnswer, updateName, updateScoreboard} from "./store/actions/questions";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
