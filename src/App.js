@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import { Button, Icon, Layout, Col, Pagination } from 'antd';
 
 import { Question } from './components/Question';
-import {fetchQuestions, submitAnswers, updateAnswer, updateName} from './store/actions/questions';
+import { ResultPopup} from './components/ResultPopup';
+import {getQuestions, submitAnswers, updateAnswer, updateName, updateScoreboard} from './store/actions/questions';
 import './App.css';
 import {ScoreBoard} from "./components/ScoreBoard";
 
@@ -81,11 +82,13 @@ class App extends Component {
                           scoreBoardData={scoreBoardData}
                           name={name}
                           isFetching={isFetching}
-                          fetchQuestions={getQuestions}
+                          getQuestions={getQuestions}
                           handleNameChange={this.handleNameChange}/>}
 
                       {pagedData.map( (question, index) => this.renderQuestion(question, qStart + index + 1) )}
                   </Col>
+                  {this.props.result !== null &&
+                    <ResultPopup result={this.props.result} onClose={this.props.updateScoreboard}/>}
               </Content>
               <Footer>
                   {pagedData.length > 0 && this.renderPagination(totalQuestions)}
@@ -103,14 +106,16 @@ const mapStateToProps = (state = {}) => {
         isFetching: questionData.isFetching,
         isSubmitting: questionData.isSubmitting,
         name: questionData.name,
-        scoreBoardData: questionData.scoreboard
+        scoreBoardData: questionData.scoreboard,
+        result: questionData.result
     };
 };
 
 const mapDispatchToProps = {
         updateAnswer: (id, answer) => updateAnswer(id, answer),
         updateName: updateName,
-        fetchQuestions: fetchQuestions,
-        submitAnswers: submitAnswers
+        getQuestions: getQuestions,
+        submitAnswers: submitAnswers,
+        updateScoreboard: updateScoreboard
     };
 export default connect(mapStateToProps, mapDispatchToProps)(App);
