@@ -11,7 +11,6 @@ it('renders without crashing', () => {
     name={''}
     scoreBoardData={[]}
     result={null}
-
     updateAnswer={jest.fn()}
     updateName={jest.fn()}
     getQuestions={jest.fn()}
